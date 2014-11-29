@@ -103,5 +103,173 @@ namespace Kritner.Common.Tests.DateExtensions
             Assert.AreEqual(dateRangeString, dateRange.ToString());
         }
 
+        [TestMethod]
+        public void DateRange_IsWithinRangeFalseWhenOutsideOfRange_Date()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime testDate = new DateTime(2014, 1, 1, 5, 1, 0);
+
+            // Act
+            DateRange dr = new DateRange(startDate, endDate);
+            bool isWithinRange = dr.IsWithinRange(testDate);
+
+            // Assert
+            Assert.IsFalse(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeTrueWhenEqualToStart_Date()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime testDate = startDate;
+
+            // Act
+            DateRange dr = new DateRange(startDate, endDate);
+            bool isWithinRange = dr.IsWithinRange(testDate);
+
+            // Assert
+            Assert.IsTrue(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeTrueWhenEqualToEnd_Date()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime testDate = endDate;
+
+            // Act
+            DateRange dr = new DateRange(startDate, endDate);
+            bool isWithinRange = dr.IsWithinRange(testDate);
+
+            // Assert
+            Assert.IsTrue(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeTrueWhenWithinStartAndEnd_Date()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime testDate = new DateTime(2014, 5, 5);
+
+            // Act
+            DateRange dr = new DateRange(startDate, endDate);
+            bool isWithinRange = dr.IsWithinRange(testDate);
+
+            // Assert
+            Assert.IsTrue(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeFalseWhenCheckingStartRangeOutsideStartRange()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime checkStartDate = new DateTime(2014, 1, 1, 5, 1, 0);
+            DateTime checkEndDate = new DateTime(2014, 5, 5);
+
+            // Act
+            DateRange dateRange = new DateRange(startDate, endDate);
+            DateRange checkDateRange = new DateRange(checkStartDate, checkEndDate);
+
+            bool isWithinRange = dateRange.IsWithinRange(checkDateRange);
+
+            // Assert
+            Assert.IsFalse(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeFalseWhenCheckingEndRangeOutsideEndRange()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime checkStartDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime checkEndDate = new DateTime(2015, 1, 1, 5, 1, 2);
+
+            // Act
+            DateRange dateRange = new DateRange(startDate, endDate);
+            DateRange checkDateRange = new DateRange(checkStartDate, checkEndDate);
+
+            bool isWithinRange = dateRange.IsWithinRange(checkDateRange);
+
+            // Assert
+            Assert.IsFalse(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeFalseWhenCheckingRangeCompletelyOutsideDateRange()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime checkStartDate = new DateTime(2013, 1, 1, 5, 1, 1);
+            DateTime checkEndDate = new DateTime(2016, 1, 1, 5, 1, 2);
+
+            // Act
+            DateRange dateRange = new DateRange(startDate, endDate);
+            DateRange checkDateRange = new DateRange(checkStartDate, checkEndDate);
+
+            bool isWithinRange = dateRange.IsWithinRange(checkDateRange);
+
+            // Assert
+            Assert.IsFalse(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeTrueWhenDateRangesEqual()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime checkStartDate = startDate;
+            DateTime checkEndDate = endDate;
+
+            // Act
+            DateRange dateRange = new DateRange(startDate, endDate);
+            DateRange checkDateRange = new DateRange(checkStartDate, checkEndDate);
+
+            bool isWithinRange = dateRange.IsWithinRange(checkDateRange);
+
+            // Assert
+            Assert.IsTrue(isWithinRange);
+        }
+
+        [TestMethod]
+        public void DateRange_IsWithinRangeTrueWhenDateRangesWithinDateRange()
+        {
+            // Arrange
+            DateTime startDate = new DateTime(2014, 1, 1, 5, 1, 1);
+            DateTime endDate = new DateTime(2015, 1, 1, 5, 1, 1);
+
+            DateTime checkStartDate = startDate.AddSeconds(1);
+            DateTime checkEndDate = endDate.AddSeconds(-1);
+
+            // Act
+            DateRange dateRange = new DateRange(startDate, endDate);
+            DateRange checkDateRange = new DateRange(checkStartDate, checkEndDate);
+
+            bool isWithinRange = dateRange.IsWithinRange(checkDateRange);
+
+            // Assert
+            Assert.IsTrue(isWithinRange);
+        }
+
     }
 }

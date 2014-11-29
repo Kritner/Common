@@ -12,9 +12,9 @@ namespace Kritner.Common.DateExtensions
 
         public DateTime StartDate { get; private set; }
         public DateTime EndDate { get; private set; }
-        public TimeSpan DateRangeSpan { get { return EndDate - StartDate; } }
+        public TimeSpan DateRangeSpan { get { return new TimeSpan(EndDate.Ticks - StartDate.Ticks); } }
 
-        private const string _DateFormat = "dd/MM/yyyy";
+        private const string _DATE_FORMAT = "dd/MM/yyyy";
 
         /// <summary>
         /// Constructor - Create a DateRange object
@@ -48,7 +48,27 @@ namespace Kritner.Common.DateExtensions
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0} - {1}", this.StartDate.ToString(_DateFormat), EndDate.ToString(_DateFormat));
+            return string.Format("{0} - {1}", this.StartDate.ToString(_DATE_FORMAT), EndDate.ToString(_DATE_FORMAT));
+        }
+
+        /// <summary>
+        /// Is the provided date within this DateRange?
+        /// </summary>
+        /// <param name="date">The date to check</param>
+        /// <returns>true when the date falls within this date range</returns>
+        public bool IsWithinRange(DateTime date)
+        {
+            return date >= this.StartDate && date <= this.EndDate;
+        }
+
+        /// <summary>
+        /// Is the provided date range within this DateRange?
+        /// </summary>
+        /// <param name="dateRange">The DateRange to check against this DateRange</param>
+        /// <returns>True if the provided dateRange is completely contained within this DateRange</returns>
+        public bool IsWithinRange(DateRange dateRange)
+        {
+            return this.IsWithinRange(dateRange.StartDate) && this.IsWithinRange(dateRange.EndDate);
         }
 
     }
