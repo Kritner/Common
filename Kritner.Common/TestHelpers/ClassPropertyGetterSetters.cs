@@ -27,7 +27,9 @@ namespace Kritner.Common.TestHelpers
         public static TClass TestClassProperties<TClass>(TClass tClass)
             where TClass : class
         {
-            var properties = tClass.GetType().GetProperties();
+            TClass objectToModify = tClass.CloneObject<TClass>();
+
+            PropertyInfo[] properties = typeof(TClass).GetProperties(BindingFlags.Public | BindingFlags.Instance);
             List<string> unmodifyableProperties = new List<string>();
 
             // For every public property in the class
@@ -35,7 +37,7 @@ namespace Kritner.Common.TestHelpers
             {
                 try
                 {
-                    tClass = ChangeClassProperty(tClass, property);
+                    objectToModify = ChangeClassProperty(objectToModify, property);
                 }
                 catch (UnmodifyablePropertyException ex)
                 {
@@ -60,7 +62,7 @@ namespace Kritner.Common.TestHelpers
                 throw new UnmodifyablePropertyException(dictProperties);
             }
 
-            return tClass;
+            return objectToModify;
         }
 
         /// <summary>
@@ -72,25 +74,88 @@ namespace Kritner.Common.TestHelpers
         private static TClass ChangeClassProperty<TClass>(TClass modifiedClass, PropertyInfo property) where TClass : class
         {
 
-            var propertyType = property.PropertyType;
+            bool canSet = true;
 
-            try
+            if (!property.CanWrite || !property.CanRead)
+                canSet = false;
+
+            MethodInfo mget = property.GetGetMethod(false);
+            MethodInfo mset = property.GetSetMethod(false);
+
+            if (mget == null || mset == null)
+                canSet = false;
+
+            if (canSet)
             {
-                switch (Type.GetTypeCode(propertyType))
+                var currentValue = modifiedClass
+                    .GetType()
+                    .GetProperty(property.Name)
+                    .GetValue(modifiedClass, null);
+
+                switch (Type.GetTypeCode(property.PropertyType))
                 {
                     case TypeCode.Boolean:
-                        var currentValue = modifiedClass.GetType().GetProperty(property.Name).GetValue(modifiedClass, null);
                         property.SetValue(modifiedClass, !(bool)currentValue);
+                        break;
 
+                    case TypeCode.String:
+                        if (currentValue == null)
+                            break;
+                        property.SetValue(modifiedClass, string.Format("{0}1", currentValue));
+                        break;
+
+                    case TypeCode.DateTime:
+                        DateTime dt = DateTime.Parse(currentValue.ToString());
+
+                        if (dt == DateTime.MaxValue)
+                            property.SetValue(modifiedClass, dt.AddDays(-1));
+                        else
+                            property.SetValue(modifiedClass, dt.AddDays(1));
+                        break;
+
+                    case TypeCode.Int16:
+                        Int16 int16 = Convert.ToInt16(currentValue);
+                        if (int16 == Int16.MaxValue)
+                            property.SetValue(modifiedClass, int16--);
+                        else
+                            property.SetValue(modifiedClass, int16++);
+                        break;
+
+                    case TypeCode.Int32:
+                        Int32 int32 = Convert.ToInt32(currentValue);
+                        if (int32 == Int32.MaxValue)
+                            property.SetValue(modifiedClass, int32--);
+                        else
+                            property.SetValue(modifiedClass, int32++);
+                        break;
+
+                    case TypeCode.Int64:
+                        Int64 int64 = Convert.ToInt64(currentValue);
+                        if (int64 == Int64.MaxValue)
+                            property.SetValue(modifiedClass, int64--);
+                        else
+                            property.SetValue(modifiedClass, int64++);
+                        break;
+
+                    case TypeCode.Decimal:
+                        Decimal decimalVal = Convert.ToDecimal(currentValue);
+                        if (decimalVal == Decimal.MaxValue)
+                            property.SetValue(modifiedClass, decimalVal--);
+                        else
+                            property.SetValue(modifiedClass, decimalVal++);
+                        break;
+
+                    case TypeCode.Double:
+                        Double doubleVal = Convert.ToDouble(currentValue);
+                        if (doubleVal == Double.MaxValue)
+                            property.SetValue(modifiedClass, doubleVal--);
+                        else
+                            property.SetValue(modifiedClass, doubleVal++);
                         break;
 
                     default:
                         throw new UnmodifyablePropertyException(property.Name);
                 }
-            }
-            catch
-            {
-                throw new UnmodifyablePropertyException(property.Name);
             }
 
             return modifiedClass;
