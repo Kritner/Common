@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kritner.Common.TestHelpers
+namespace Kritner.Common.TestHelpers.Exceptions
 {
 
     /// <summary>

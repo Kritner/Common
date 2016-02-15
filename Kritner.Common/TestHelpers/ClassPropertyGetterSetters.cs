@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kritner.Common.TestHelpers.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -71,7 +72,7 @@ namespace Kritner.Common.TestHelpers
         /// <typeparam name="TClass"></typeparam>
         /// <param name="modifiedClass">The class to modify</param>
         /// <param name="property">The property to modify</param>
-        private static TClass ChangeClassProperty<TClass>(TClass modifiedClass, PropertyInfo property) where TClass : class
+        public static TClass ChangeClassProperty<TClass>(TClass modifiedClass, PropertyInfo property) where TClass : class
         {
 
             bool canSet = true;
