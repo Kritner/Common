@@ -37,6 +37,8 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeWars\AreTheySame.cs" />
+    <Compile Include="CodeWars\FindShort.cs" />
     <Compile Include="DateExtensions\DateRange.cs" />
     <Compile Include="DateExtensions\Exceptions\StartDateOccursAfterEndDateException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
