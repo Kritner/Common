@@ -59,6 +59,7 @@
     <Compile Include="CodeWars\AreTheySameTests.cs" />
     <Compile Include="CodeWars\FindShortTests.cs" />
     <Compile Include="CodeWars\OppositeTests.cs" />
+    <Compile Include="CodeWars\CountPositivesSumNegativesTests.cs" />
     <Compile Include="DateExtensions\DateRangeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
