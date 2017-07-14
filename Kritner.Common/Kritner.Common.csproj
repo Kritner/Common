@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="CodeWars\AreTheySame.cs" />
     <Compile Include="CodeWars\CountPositivesSumNegatives.cs" />
+    <Compile Include="CodeWars\DescendingOrderKata.cs" />
     <Compile Include="CodeWars\FindShort.cs" />
     <Compile Include="CodeWars\NthSeries.cs" />
     <Compile Include="CodeWars\Opposite.cs" />

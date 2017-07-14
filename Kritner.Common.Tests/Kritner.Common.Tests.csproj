@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CodeWars\AreTheySameTests.cs" />
+    <Compile Include="CodeWars\DescendingOrderTests.cs" />
     <Compile Include="CodeWars\FindShortTests.cs" />
     <Compile Include="CodeWars\OppositeTests.cs" />
     <Compile Include="CodeWars\CountPositivesSumNegativesTests.cs" />
